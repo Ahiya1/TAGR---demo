@@ -5,36 +5,48 @@ const anthropic = new Anthropic({
 });
 
 function getIsraeliDateTime() {
-  const now = new Date();
-  const israelTime = new Date(
-    now.toLocaleString("en-US", { timeZone: "Asia/Jerusalem" })
-  );
-  return {
-    date: israelTime.toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }),
-    time: israelTime.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    }),
-    hebrew: {
-      date: israelTime.toLocaleDateString("he-IL", {
+  try {
+    const now = new Date();
+    const israelTime = new Date(
+      now.toLocaleString("en-US", { timeZone: "Asia/Jerusalem" })
+    );
+    return {
+      date: israelTime.toLocaleDateString("en-US", {
         weekday: "long",
         year: "numeric",
         month: "long",
         day: "numeric",
       }),
-      time: israelTime.toLocaleTimeString("he-IL", {
+      time: israelTime.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
-        hour12: false,
+        hour12: true,
       }),
-    },
-  };
+      hebrew: {
+        date: israelTime.toLocaleDateString("he-IL", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
+        time: israelTime.toLocaleTimeString("he-IL", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }),
+      },
+    };
+  } catch (error) {
+    console.error("Error getting Israeli DateTime:", error);
+    return {
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
+      hebrew: {
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString(),
+      },
+    };
+  }
 }
 
 function getSystemPrompt(language = "en") {
@@ -149,7 +161,8 @@ Make this session create an immediate mindset shift worth 100 NIS.`;
 }
 
 module.exports = async function handler(req, res) {
-  // Handle CORS
+  // Set response headers first
+  res.setHeader("Content-Type", "application/json");
   res.setHeader("Access-Control-Allow-Credentials", true);
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -161,18 +174,36 @@ module.exports = async function handler(req, res) {
     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
   );
 
+  // Handle preflight
   if (req.method === "OPTIONS") {
-    res.status(200).end();
-    return;
+    console.log("Handling OPTIONS request");
+    return res.status(200).json({ success: true, message: "CORS preflight" });
   }
 
   if (req.method !== "POST") {
-    return res
-      .status(405)
-      .json({ success: false, error: "Method not allowed" });
+    console.log(`Method not allowed: ${req.method}`);
+    return res.status(405).json({
+      success: false,
+      error: "Method not allowed",
+      received: req.method,
+      expected: "POST",
+    });
+  }
+
+  // Validate environment
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.error("Missing ANTHROPIC_API_KEY environment variable");
+    return res.status(500).json({
+      success: false,
+      error: "Server configuration error",
+      details: "Missing API key",
+    });
   }
 
   try {
+    console.log("Starting coach API request...");
+    console.log("Request body:", JSON.stringify(req.body, null, 2));
+
     const {
       goalAmount,
       deadline,
@@ -180,6 +211,28 @@ module.exports = async function handler(req, res) {
       howMethod,
       language = "en",
     } = req.body;
+
+    // Validate required fields
+    if (!goalAmount) {
+      return res.status(400).json({
+        success: false,
+        error: "Missing required field: goalAmount",
+      });
+    }
+
+    if (!deadline) {
+      return res.status(400).json({
+        success: false,
+        error: "Missing required field: deadline",
+      });
+    }
+
+    if (!howMethod) {
+      return res.status(400).json({
+        success: false,
+        error: "Missing required field: howMethod",
+      });
+    }
 
     const userMessage =
       language === "he"
@@ -189,7 +242,7 @@ module.exports = async function handler(req, res) {
 **המועד האחרון שלי:** ${deadline}
 **איך אני מתכנן לגייס את הכסף הזה:** ${howMethod}
 
-שנה את היחס שלי למטרה הזו באמצעות המתודולוgiה של נפוליאון היל. עשה את זה אישי מאוד ומיידי לפעולה. אני צריך להרגיש את התשוקה הבוערת שהיל מדבר עליה. השתמש בעיצוב markdown עשיר כדי להפוך את זה לחזק חזותית.`
+שנה את היחס שלי למטרה הזו באמצעות המתודולוגיה של נפוליאון היל. עשה את זה אישי מאוד ומיידי לפעולה. אני צריך להרגיש את התשוקה הבוערת שהיל מדבר עליה. השתמש בעיצוב markdown עשיר כדי להפוך את זה לחזק חזותית.`
         : `My name is ${userName}.
 
 **My specific financial goal:** ${goalAmount} NIS
@@ -198,7 +251,18 @@ module.exports = async function handler(req, res) {
 
 Transform my relationship with this goal using Napoleon Hill's methodology. Make this intensely personal and immediately actionable. I need to feel the BURNING DESIRE Hill talks about. Use rich markdown formatting to make this visually powerful.`;
 
-    const message = await anthropic.messages.create({
+    console.log("Calling Anthropic API with model: claude-sonnet-4-20250514");
+    console.log("User message length:", userMessage.length);
+
+    // Set a timeout for the API call
+    const apiTimeout = new Promise((_, reject) =>
+      setTimeout(
+        () => reject(new Error("API call timeout after 200 seconds")),
+        200000
+      )
+    );
+
+    const apiCall = anthropic.messages.create({
       model: "claude-sonnet-4-20250514",
       max_tokens: 2500,
       temperature: 0.8,
@@ -211,7 +275,23 @@ Transform my relationship with this goal using Napoleon Hill's methodology. Make
       ],
     });
 
-    res.json({
+    const message = await Promise.race([apiCall, apiTimeout]);
+
+    console.log("Anthropic API call successful");
+    console.log("Response content type:", typeof message.content[0].text);
+    console.log("Response length:", message.content[0].text.length);
+
+    // Validate response
+    if (
+      !message ||
+      !message.content ||
+      !message.content[0] ||
+      !message.content[0].text
+    ) {
+      throw new Error("Invalid response structure from Anthropic API");
+    }
+
+    const response = {
       success: true,
       response: message.content[0].text,
       goalAmount,
@@ -219,12 +299,56 @@ Transform my relationship with this goal using Napoleon Hill's methodology. Make
       userName,
       howMethod,
       language,
-    });
+      timestamp: new Date().toISOString(),
+      processingTime: Date.now(),
+    };
+
+    console.log("Sending successful response");
+    return res.status(200).json(response);
   } catch (error) {
-    console.error("Coach API Error:", error);
-    res.status(500).json({
+    console.error("Coach API Error Details:");
+    console.error("Error name:", error.name);
+    console.error("Error message:", error.message);
+    console.error("Error stack:", error.stack);
+
+    // Handle specific error types
+    let errorMessage = "Unknown error occurred";
+    let statusCode = 500;
+
+    if (error.message.includes("timeout")) {
+      errorMessage = "Request timeout - please try again";
+      statusCode = 408;
+    } else if (error.message.includes("API key")) {
+      errorMessage = "Authentication error";
+      statusCode = 401;
+    } else if (error.message.includes("model")) {
+      errorMessage = "Model configuration error";
+      statusCode = 400;
+    } else if (error.message.includes("rate")) {
+      errorMessage = "Rate limit exceeded";
+      statusCode = 429;
+    } else {
+      errorMessage = error.message || "Internal server error";
+    }
+
+    const errorResponse = {
       success: false,
-      error: error.message,
-    });
+      error: errorMessage,
+      errorType: error.name || "UnknownError",
+      timestamp: new Date().toISOString(),
+      // Only include details in development
+      ...(process.env.NODE_ENV === "development" && {
+        details: {
+          originalMessage: error.message,
+          stack: error.stack,
+        },
+      }),
+    };
+
+    console.log(
+      "Sending error response:",
+      JSON.stringify(errorResponse, null, 2)
+    );
+    return res.status(statusCode).json(errorResponse);
   }
 };
