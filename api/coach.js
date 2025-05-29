@@ -148,7 +148,7 @@ TONE: Use Hill's powerful language - "BURNING DESIRE," "white heat of obsession,
 Make this session create an immediate mindset shift worth 100 NIS.`;
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // Handle CORS
   res.setHeader("Access-Control-Allow-Credentials", true);
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -227,4 +227,4 @@ Transform my relationship with this goal using Napoleon Hill's methodology. Make
       error: error.message,
     });
   }
-}
+};
