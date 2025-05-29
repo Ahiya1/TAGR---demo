@@ -264,7 +264,7 @@ Transform my relationship with this goal using Napoleon Hill's methodology. Make
 
     const apiCall = anthropic.messages.create({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 2500,
+      max_tokens: 100,
       temperature: 0.8,
       system: getSystemPrompt(language),
       messages: [
