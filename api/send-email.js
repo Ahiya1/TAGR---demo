@@ -1,7 +1,4 @@
 const nodemailer = require("nodemailer");
-const PDFDocument = require("pdfkit");
-const fs = require("fs");
-const path = require("path");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -10,60 +7,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.GMAIL_APP_PASSWORD,
   },
 });
-
-// Function to create PDF
-async function createSuccessPDF(content, userName, language) {
-  const isHebrew = language === "he";
-
-  const doc = new PDFDocument({
-    size: "A4",
-    margins: { top: 60, bottom: 60, left: 60, right: 60 },
-  });
-
-  const fileName = `success-blueprint-${userName}-${Date.now()}.pdf`;
-  const filePath = path.join("/tmp", fileName);
-
-  doc.pipe(fs.createWriteStream(filePath));
-
-  // Add title
-  doc
-    .fontSize(24)
-    .font("Helvetica-Bold")
-    .fillColor("#4f46e5")
-    .text(
-      isHebrew ? "תוכנית הצלחתך האישית" : "Your Personal Success Blueprint",
-      { align: "center" }
-    );
-
-  doc.moveDown(1.5);
-
-  // Add content (simplified - in real implementation you'd parse the HTML properly)
-  doc
-    .fontSize(12)
-    .font("Helvetica")
-    .fillColor("#374151")
-    .text(content.replace(/<[^>]*>/g, ""), {
-      // Strip HTML tags for PDF
-      align: isHebrew ? "right" : "left",
-      lineGap: 5,
-    });
-
-  doc.moveDown(2);
-
-  // Add footer
-  doc
-    .fontSize(10)
-    .fillColor("#6b7280")
-    .text(isHebrew ? "בודאות שקטה, אחיה" : "With calm certainty, Ahiya", {
-      align: "center",
-    });
-
-  doc.end();
-
-  return new Promise((resolve) => {
-    doc.on("end", () => resolve(filePath));
-  });
-}
 
 export default async function handler(req, res) {
   // Handle CORS
@@ -117,22 +60,15 @@ export default async function handler(req, res) {
       ? "פשוט הגב למייל הזה. אני קורא כל מילה בעצמי."
       : "Just reply to this email. I read every word myself.";
 
-    const pdfNote = isHebrew
-      ? "רצית עותק PDF? הורד אותו כאן ושמור אותו במקום שתמיד תראה אותו."
-      : "Want a PDF copy? Download it here and keep it somewhere you'll always see it.";
+    const copyNote = isHebrew
+      ? "רוצה לשמור עותק? פשוט העתק את הטקסט למטה לקובץ או הדפס את המייל הזה."
+      : "Want to save a copy? Just copy the text below to a file or print this email.";
 
     const signature = isHebrew ? "אחיה" : "Ahiya";
 
     const postScript = isHebrew
       ? "אגב - אם זה עזר לך, שתף אותו עם מישהו שיכול להפיק מזה תועלת. הכוח הכי גדול הוא כשאנשים עוזרים לאנשים אחרים למצוא את השקט שלהם."
       : "By the way - if this helped you, share it with someone who could benefit. The greatest power is when people help others find their own quiet strength.";
-
-    // Create PDF
-    const pdfPath = await createSuccessPDF(content, userName, language);
-    const pdfAttachment = {
-      filename: `success-blueprint-${userName}.pdf`,
-      path: pdfPath,
-    };
 
     const htmlContent = `
         <!DOCTYPE html>
@@ -246,32 +182,21 @@ export default async function handler(req, res) {
                         ">${readingInstructions}</p>
                     </div>
 
-                    <!-- PDF Download -->
+                    <!-- Copy Instructions -->
                     <div style="
                         text-align: center;
                         margin-bottom: 35px;
-                        padding: 25px;
+                        padding: 20px;
                         background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-                        border-radius: 12px;
-                        border: 1px solid #0284c7;
+                        border-radius: 8px;
+                        border: 1px solid #0ea5e9;
                     ">
                         <p style="
-                            margin: 0 0 20px 0;
+                            margin: 0;
                             color: #0c4a6e;
-                            font-size: 1rem;
-                        ">${pdfNote}</p>
-                        <div style="
-                            display: inline-block;
-                            background: linear-gradient(135deg, #0ea5e9, #0284c7);
-                            padding: 12px 25px;
-                            border-radius: 8px;
-                            text-decoration: none;
-                            color: white;
-                            font-weight: 600;
                             font-size: 0.95rem;
-                        ">
-                            📄 ${isHebrew ? "הורד PDF" : "Download PDF"}
-                        </div>
+                            font-style: italic;
+                        ">${copyNote}</p>
                     </div>
 
                     <!-- Personal Note -->
@@ -301,9 +226,17 @@ export default async function handler(req, res) {
                         margin-bottom: 25px;
                     ">
                         <p style="
-                            margin: 0;
+                            margin: 0 0 5px 0;
                             font-size: 1rem;
                             color: #374151;
+                        ">${
+                          isHebrew ? "בודאות שקטה," : "With calm certainty,"
+                        }</p>
+                        <p style="
+                            margin: 0;
+                            font-size: 1.1rem;
+                            color: #1f2937;
+                            font-weight: 500;
                         ">${signature}</p>
                     </div>
 
@@ -338,18 +271,9 @@ export default async function handler(req, res) {
       to: email,
       subject: subject,
       html: htmlContent,
-      attachments: [pdfAttachment],
     });
 
-    // Clean up PDF file
-    if (fs.existsSync(pdfPath)) {
-      fs.unlinkSync(pdfPath);
-    }
-
-    res.json({
-      success: true,
-      message: "Email sent successfully with PDF attachment",
-    });
+    res.json({ success: true, message: "Email sent successfully" });
   } catch (error) {
     console.error("Email API Error:", error);
     res.status(500).json({
