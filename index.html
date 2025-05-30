@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Napoleon Hill's AI Success Coach</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -17,26 +17,60 @@
       }
 
       :root {
-        --primary-gold: #f39c12;
-        --primary-red: #e74c3c;
-        --primary-blue: #3498db;
-        --primary-purple: #9b59b6;
-        --dark-blue: #2c3e50;
-        --light-gray: #ecf0f1;
-        --text-dark: #2c3e50;
-        --text-light: #7f8c8d;
-        --white: #ffffff;
-        --shadow: rgba(0, 0, 0, 0.1);
-        --shadow-heavy: rgba(0, 0, 0, 0.2);
-        --gradient-main: linear-gradient(
-          135deg,
-          #667eea 0%,
-          #764ba2 50%,
-          #f093fb 100%
-        );
-        --gradient-gold: linear-gradient(45deg, #f39c12, #e67e22);
-        --gradient-red: linear-gradient(45deg, #e74c3c, #c0392b);
-        --gradient-blue: linear-gradient(45deg, #3498db, #2980b9);
+        /* Sophisticated, muted palette */
+        --primary: #1e293b;
+        --primary-light: #334155;
+        --accent: #b45309;
+        --accent-light: #d97706;
+        --success: #065f46;
+        --warning: #92400e;
+        --error: #991b1b;
+
+        /* Neutral palette - warm grays */
+        --neutral-50: #fafaf9;
+        --neutral-100: #f5f5f4;
+        --neutral-200: #e7e5e4;
+        --neutral-300: #d6d3d1;
+        --neutral-400: #a8a29e;
+        --neutral-500: #78716c;
+        --neutral-600: #57534e;
+        --neutral-700: #44403c;
+        --neutral-800: #292524;
+        --neutral-900: #1c1917;
+        --neutral-950: #0c0a09;
+
+        /* Subtle gradients */
+        --gradient-primary: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        --gradient-accent: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+        --gradient-warm: linear-gradient(135deg, #fafaf9 0%, #f5f5f4 100%);
+        --gradient-dark: linear-gradient(135deg, #292524 0%, #1c1917 100%);
+
+        /* Glass effects - more subtle */
+        --glass-bg: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+
+        /* Typography */
+        --font-display: "Crimson Text", serif;
+        --font-body: "Inter", sans-serif;
+
+        /* Refined shadows */
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.02);
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+        --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.05);
+        --shadow-lg: 0 20px 25px rgba(0, 0, 0, 0.08);
+        --shadow-xl: 0 25px 50px rgba(0, 0, 0, 0.1);
+
+        /* Spacing */
+        --space-1: 0.25rem;
+        --space-2: 0.5rem;
+        --space-3: 0.75rem;
+        --space-4: 1rem;
+        --space-6: 1.5rem;
+        --space-8: 2rem;
+        --space-12: 3rem;
+        --space-16: 4rem;
+        --space-20: 5rem;
       }
 
       [dir="rtl"] {
@@ -45,53 +79,83 @@
       }
 
       body {
-        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
+        font-family: var(--font-body);
         line-height: 1.6;
-        color: var(--text-dark);
-        background: var(--gradient-main);
+        color: var(--neutral-800);
+        background: linear-gradient(
+          135deg,
+          #0f0f23 0%,
+          #1a1a2e 25%,
+          #16213e 50%,
+          #0f0f23 100%
+        );
         min-height: 100vh;
-        padding: 20px;
+        padding: var(--space-4);
         position: relative;
         overflow-x: hidden;
       }
 
-      /* Language Toggle */
-      .language-toggle {
+      /* Animated background */
+      .bg-animation {
         position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -2;
+        overflow: hidden;
       }
 
-      [dir="rtl"] .language-toggle {
-        right: auto;
-        left: 20px;
+      .bg-animation::before,
+      .bg-animation::after {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(99, 102, 241, 0.1) 0%,
+          transparent 50%
+        );
+        animation: float 20s ease-in-out infinite;
       }
 
-      .lang-btn {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border: none;
-        padding: 12px 18px;
-        border-radius: 30px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 8px 25px var(--shadow);
-        font-weight: 500;
+      .bg-animation::before {
+        top: -50%;
+        left: -50%;
+        animation-delay: 0s;
       }
 
-      .lang-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 35px var(--shadow-heavy);
-        background: rgba(255, 255, 255, 1);
+      .bg-animation::after {
+        bottom: -50%;
+        right: -50%;
+        animation-delay: -10s;
+        background: radial-gradient(
+          circle,
+          rgba(236, 72, 153, 0.1) 0%,
+          transparent 50%
+        );
       }
 
-      /* Floating Background Elements */
-      .floating-elements {
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0) rotate(0deg) scale(1);
+        }
+        25% {
+          transform: translate(20px, -20px) rotate(1deg) scale(1.02);
+        }
+        50% {
+          transform: translate(-10px, 20px) rotate(-1deg) scale(0.98);
+        }
+        75% {
+          transform: translate(-20px, -10px) rotate(0.5deg) scale(1.01);
+        }
+      }
+
+      /* Floating particles */
+      .particles {
         position: fixed;
         top: 0;
         left: 0;
@@ -101,55 +165,107 @@
         z-index: -1;
       }
 
-      .floating-element {
+      .particle {
         position: absolute;
-        font-size: 2rem;
-        opacity: 0.1;
-        animation: float 20s infinite linear;
+        background: rgba(99, 102, 241, 0.3);
+        border-radius: 50%;
+        animation: particle-float 15s infinite linear;
       }
 
-      .floating-element:nth-child(1) {
-        top: 10%;
+      .particle:nth-child(1) {
+        width: 4px;
+        height: 4px;
+        top: 20%;
         left: 10%;
         animation-delay: 0s;
       }
-      .floating-element:nth-child(2) {
-        top: 20%;
-        right: 15%;
+      .particle:nth-child(2) {
+        width: 6px;
+        height: 6px;
+        top: 40%;
+        left: 80%;
         animation-delay: -3s;
+        background: rgba(236, 72, 153, 0.3);
       }
-      .floating-element:nth-child(3) {
-        top: 60%;
-        left: 5%;
+      .particle:nth-child(3) {
+        width: 3px;
+        height: 3px;
+        top: 70%;
+        left: 20%;
         animation-delay: -6s;
       }
-      .floating-element:nth-child(4) {
-        bottom: 30%;
-        right: 10%;
+      .particle:nth-child(4) {
+        width: 5px;
+        height: 5px;
+        top: 10%;
+        left: 60%;
         animation-delay: -9s;
+        background: rgba(16, 185, 129, 0.3);
       }
-      .floating-element:nth-child(5) {
-        bottom: 10%;
-        left: 20%;
+      .particle:nth-child(5) {
+        width: 4px;
+        height: 4px;
+        top: 80%;
+        left: 70%;
         animation-delay: -12s;
       }
-      .floating-element:nth-child(6) {
-        top: 40%;
-        right: 25%;
-        animation-delay: -15s;
+
+      @keyframes particle-float {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100vh) rotate(360deg);
+          opacity: 0;
+        }
       }
 
-      @keyframes float {
-        from {
-          transform: translateY(0px) rotate(0deg);
-        }
-        to {
-          transform: translateY(-20px) rotate(360deg);
-        }
+      /* Language Toggle */
+      .language-toggle {
+        position: fixed;
+        top: var(--space-6);
+        right: var(--space-6);
+        z-index: 1000;
       }
 
+      [dir="rtl"] .language-toggle {
+        right: auto;
+        left: var(--space-6);
+      }
+
+      .lang-btn {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        color: white;
+        padding: var(--space-3) var(--space-4);
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: var(--glass-shadow);
+        font-weight: 500;
+        font-size: 0.875rem;
+      }
+
+      .lang-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      /* Container */
       .container {
-        max-width: 1000px;
+        max-width: 1200px;
         margin: 0 auto;
         position: relative;
       }
@@ -157,66 +273,93 @@
       /* Header */
       header {
         text-align: center;
-        margin-bottom: 40px;
+        margin-bottom: var(--space-16);
         color: white;
-        padding: 40px 0;
+        padding: var(--space-16) 0;
       }
 
       .hero-content h1 {
-        font-family: "Playfair Display", serif;
-        font-size: clamp(2.5rem, 5vw, 4rem);
-        font-weight: 900;
-        margin-bottom: 15px;
-        text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.3);
-        background: linear-gradient(45deg, #fff, #f39c12);
+        font-family: var(--font-display);
+        font-size: clamp(2.5rem, 6vw, 5rem);
+        font-weight: 600;
+        margin-bottom: var(--space-6);
+        background: linear-gradient(
+          135deg,
+          #ffffff 0%,
+          #f59e0b 50%,
+          #ec4899 100%
+        );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        line-height: 1.1;
+        letter-spacing: -0.025em;
       }
 
       .subtitle {
-        font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-        opacity: 0.95;
-        margin-bottom: 30px;
+        font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+        opacity: 0.9;
+        margin-bottom: var(--space-8);
         font-weight: 300;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       .hero-stats {
-        display: flex;
-        justify-content: center;
-        gap: 40px;
-        margin-top: 30px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: var(--space-8);
+        margin-top: var(--space-12);
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       .stat-item {
         text-align: center;
+        padding: var(--space-6);
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        transition: all 0.3s ease;
+      }
+
+      .stat-item:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+        background: rgba(255, 255, 255, 0.15);
       }
 
       .stat-number {
-        font-family: "Playfair Display", serif;
+        font-family: var(--font-display);
         font-size: 2.5rem;
-        font-weight: 700;
+        font-weight: 600;
         line-height: 1;
-        margin-bottom: 5px;
+        margin-bottom: var(--space-2);
+        background: var(--gradient-accent);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
 
       .stat-label {
-        font-size: 0.9rem;
+        font-size: 0.875rem;
         opacity: 0.8;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.05em;
         font-weight: 500;
       }
 
       /* Cards */
       .card {
-        background: rgba(255, 255, 255, 0.98);
+        background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(20px);
-        border-radius: 20px;
-        padding: 40px;
-        box-shadow: 0 25px 50px var(--shadow-heavy);
-        margin-bottom: 30px;
         border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 24px;
+        padding: var(--space-12);
+        box-shadow: var(--shadow-xl);
+        margin-bottom: var(--space-8);
         position: relative;
         overflow: hidden;
       }
@@ -228,64 +371,67 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: var(--gradient-gold);
+        background: var(--gradient-primary);
       }
 
       .card-header {
-        margin-bottom: 30px;
+        margin-bottom: var(--space-8);
       }
 
       .card h2 {
-        font-family: "Playfair Display", serif;
-        color: var(--text-dark);
-        margin-bottom: 15px;
-        font-size: clamp(1.5rem, 3vw, 2rem);
-        font-weight: 700;
+        font-family: var(--font-display);
+        color: var(--neutral-800);
+        margin-bottom: var(--space-4);
+        font-size: clamp(1.5rem, 3vw, 2.25rem);
+        font-weight: 600;
+        line-height: 1.2;
       }
 
       .intro {
         font-style: italic;
-        color: var(--text-light);
-        font-size: 1.1rem;
+        color: var(--neutral-600);
+        font-size: 1.125rem;
         text-align: center;
-        padding: 25px;
-        background: linear-gradient(45deg, #f8f9fa, #ffffff);
-        border-radius: 15px;
-        border-left: 4px solid var(--primary-red);
+        padding: var(--space-8);
+        background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+        border-radius: 16px;
+        border-left: 4px solid var(--primary);
         position: relative;
         overflow: hidden;
+        line-height: 1.6;
       }
 
       .intro::before {
         content: '"';
         font-size: 4rem;
-        color: var(--primary-red);
-        opacity: 0.2;
+        color: var(--primary);
+        opacity: 0.1;
         position: absolute;
         top: -10px;
         left: 20px;
-        font-family: "Playfair Display", serif;
+        font-family: var(--font-display);
       }
 
       .author {
         display: block;
-        margin-top: 10px;
+        margin-top: var(--space-3);
         font-weight: 600;
-        color: var(--primary-red);
-        font-size: 0.95rem;
+        color: var(--primary);
+        font-size: 1rem;
+        font-style: normal;
       }
 
       /* Form Styling */
       .form-group {
-        margin-bottom: 28px;
+        margin-bottom: var(--space-8);
       }
 
       label {
         display: block;
         font-weight: 600;
-        margin-bottom: 10px;
-        color: var(--text-dark);
-        font-size: 1.05rem;
+        margin-bottom: var(--space-3);
+        color: var(--neutral-700);
+        font-size: 1rem;
       }
 
       .input-wrapper {
@@ -296,91 +442,92 @@
 
       .currency-symbol {
         position: absolute;
-        left: 15px;
+        left: var(--space-4);
         font-weight: 600;
-        color: var(--primary-gold);
-        font-size: 1.2rem;
+        color: var(--secondary);
+        font-size: 1.125rem;
         z-index: 10;
       }
 
       [dir="rtl"] .currency-symbol {
         left: auto;
-        right: 15px;
+        right: var(--space-4);
       }
 
       input,
       textarea {
         width: 100%;
-        padding: 18px;
-        border: 2px solid var(--light-gray);
+        padding: var(--space-4);
+        border: 2px solid var(--neutral-200);
         border-radius: 12px;
         font-size: 1rem;
         transition: all 0.3s ease;
         font-family: inherit;
         background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(10px);
+        font-weight: 400;
       }
 
       input[type="number"] {
-        padding-left: 45px;
+        padding-left: calc(var(--space-4) * 3);
       }
 
       [dir="rtl"] input[type="number"] {
-        padding-left: 18px;
-        padding-right: 45px;
+        padding-left: var(--space-4);
+        padding-right: calc(var(--space-4) * 3);
       }
 
       input:focus,
       textarea:focus {
         outline: none;
-        border-color: var(--primary-blue);
-        box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         background: rgba(255, 255, 255, 1);
         transform: translateY(-1px);
       }
 
       textarea {
         resize: vertical;
-        min-height: 100px;
+        min-height: 120px;
+        line-height: 1.6;
       }
 
       small {
         display: block;
-        color: var(--text-light);
-        margin-top: 8px;
+        color: var(--neutral-500);
+        margin-top: var(--space-2);
         font-style: italic;
-        font-size: 0.9rem;
+        font-size: 0.875rem;
       }
 
-      /* Enhanced Buttons */
+      /* Buttons */
       .cta-button {
         width: 100%;
-        padding: 20px;
-        background: var(--gradient-red);
+        padding: var(--space-6) var(--space-8);
+        background: var(--gradient-primary);
         color: white;
         border: none;
-        border-radius: 15px;
-        font-size: 1.2rem;
+        border-radius: 16px;
+        font-size: 1.125rem;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 1px;
         position: relative;
         overflow: hidden;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: var(--space-3);
+        text-transform: none;
+        letter-spacing: 0;
       }
 
       .cta-button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(231, 76, 60, 0.4);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
       }
 
       .cta-button:active {
-        transform: translateY(-1px);
+        transform: translateY(0);
       }
 
       .cta-button:disabled {
@@ -409,21 +556,13 @@
       }
 
       .cta-button.secondary {
-        background: var(--gradient-blue);
-        margin-top: 20px;
-      }
-
-      .cta-button.secondary:hover {
-        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.4);
+        background: var(--gradient-secondary);
+        margin-top: var(--space-4);
       }
 
       .cta-button.tertiary {
-        background: var(--gradient-gold);
-        margin-top: 15px;
-      }
-
-      .cta-button.tertiary:hover {
-        box-shadow: 0 15px 35px rgba(243, 156, 18, 0.4);
+        background: var(--gradient-accent);
+        margin-top: var(--space-4);
       }
 
       /* Loading */
@@ -434,32 +573,32 @@
       #loading {
         text-align: center;
         color: white;
-        padding: 60px 40px;
+        padding: var(--space-16) var(--space-8);
       }
 
       .loading-container {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--glass-bg);
         backdrop-filter: blur(20px);
-        border-radius: 20px;
-        padding: 40px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: var(--space-12);
       }
 
       .loader {
         position: relative;
         width: 80px;
         height: 80px;
-        margin: 0 auto 30px;
+        margin: 0 auto var(--space-8);
       }
 
       .loader-ring {
         position: absolute;
         width: 100%;
         height: 100%;
-        border: 4px solid transparent;
-        border-top: 4px solid var(--primary-gold);
+        border: 3px solid transparent;
+        border-top: 3px solid var(--secondary);
         border-radius: 50%;
-        animation: spin 1s linear infinite;
+        animation: spin 1.5s linear infinite;
       }
 
       .loader-ring:nth-child(2) {
@@ -467,8 +606,8 @@
         height: 70%;
         top: 15%;
         left: 15%;
-        border-top-color: var(--primary-blue);
-        animation-delay: -0.3s;
+        border-top-color: var(--primary);
+        animation-delay: -0.5s;
       }
 
       .loader-ring:nth-child(3) {
@@ -476,8 +615,8 @@
         height: 40%;
         top: 30%;
         left: 30%;
-        border-top-color: var(--primary-red);
-        animation-delay: -0.6s;
+        border-top-color: var(--accent);
+        animation-delay: -1s;
       }
 
       @keyframes spin {
@@ -494,15 +633,15 @@
         height: 4px;
         background: rgba(255, 255, 255, 0.2);
         border-radius: 2px;
-        margin-top: 20px;
+        margin-top: var(--space-6);
         overflow: hidden;
       }
 
       .progress-bar {
         height: 100%;
-        background: var(--gradient-gold);
+        background: var(--gradient-accent);
         border-radius: 2px;
-        animation: progress 3s ease-in-out infinite;
+        animation: progress 4s ease-in-out infinite;
       }
 
       @keyframes progress {
@@ -510,7 +649,7 @@
           width: 0%;
         }
         50% {
-          width: 70%;
+          width: 75%;
         }
         100% {
           width: 100%;
@@ -519,7 +658,7 @@
 
       /* Results */
       .result-card {
-        animation: slideInUp 0.6s ease-out;
+        animation: slideInUp 0.8s ease-out;
       }
 
       @keyframes slideInUp {
@@ -537,137 +676,126 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        margin-bottom: 25px;
+        margin-bottom: var(--space-8);
         flex-wrap: wrap;
-        gap: 15px;
+        gap: var(--space-4);
       }
 
       .result-actions {
         display: flex;
-        gap: 10px;
+        gap: var(--space-3);
       }
 
       .action-btn {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 10px 16px;
+        gap: var(--space-2);
+        padding: var(--space-3) var(--space-4);
         border: none;
-        border-radius: 10px;
+        border-radius: 12px;
         cursor: pointer;
-        font-size: 0.9rem;
+        font-size: 0.875rem;
         font-weight: 500;
         transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
       }
 
       .email-btn {
-        background: var(--gradient-blue);
+        background: var(--gradient-primary);
         color: white;
       }
 
       .share-btn {
-        background: var(--gradient-gold);
+        background: var(--gradient-secondary);
         color: white;
       }
 
       .action-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px var(--shadow);
+        box-shadow: var(--shadow-md);
       }
 
       /* Markdown Content */
       .markdown-content {
-        font-size: 1.1rem;
-        line-height: 1.8;
-        margin-bottom: 30px;
+        font-size: 1.125rem;
+        line-height: 1.7;
+        margin-bottom: var(--space-8);
+        color: var(--neutral-700);
       }
 
       .markdown-content h1 {
-        color: var(--primary-red);
-        font-family: "Playfair Display", serif;
-        font-size: 1.9rem;
-        margin: 30px 0 15px 0;
-        border-bottom: 3px solid var(--primary-red);
-        padding-bottom: 10px;
+        color: var(--primary);
+        font-family: var(--font-display);
+        font-size: 2rem;
+        margin: var(--space-8) 0 var(--space-4) 0;
+        border-bottom: 3px solid var(--primary);
+        padding-bottom: var(--space-3);
+        font-weight: 600;
       }
 
       .markdown-content h2 {
-        color: var(--primary-blue);
-        font-family: "Playfair Display", serif;
-        font-size: 1.6rem;
-        margin: 25px 0 12px 0;
+        color: var(--accent);
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        margin: var(--space-6) 0 var(--space-3) 0;
+        font-weight: 600;
       }
 
       .markdown-content h3 {
-        color: var(--primary-purple);
-        font-size: 1.4rem;
-        margin: 20px 0 10px 0;
+        color: var(--secondary);
+        font-size: 1.25rem;
+        margin: var(--space-4) 0 var(--space-2) 0;
+        font-weight: 600;
       }
 
       .markdown-content strong {
-        color: var(--primary-red);
+        color: var(--primary);
         font-weight: 700;
       }
 
       .markdown-content em {
-        color: var(--primary-purple);
+        color: var(--accent);
         font-style: italic;
       }
 
       .markdown-content ul,
       .markdown-content ol {
-        margin: 15px 0;
-        padding-left: 30px;
+        margin: var(--space-4) 0;
+        padding-left: var(--space-6);
       }
 
       [dir="rtl"] .markdown-content ul,
       [dir="rtl"] .markdown-content ol {
         padding-left: 0;
-        padding-right: 30px;
+        padding-right: var(--space-6);
       }
 
       .markdown-content li {
-        margin: 10px 0;
+        margin: var(--space-2) 0;
       }
 
       .markdown-content blockquote {
-        border-left: 4px solid var(--primary-gold);
-        background: linear-gradient(45deg, #fef9e7, #ffffff);
-        margin: 20px 0;
-        padding: 20px 25px;
+        border-left: 4px solid var(--secondary);
+        background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%);
+        margin: var(--space-6) 0;
+        padding: var(--space-6);
         font-style: italic;
-        color: var(--text-light);
-        border-radius: 10px;
+        color: var(--neutral-600);
+        border-radius: 12px;
         position: relative;
       }
 
       [dir="rtl"] .markdown-content blockquote {
         border-left: none;
-        border-right: 4px solid var(--primary-gold);
-      }
-
-      .markdown-content blockquote::before {
-        content: '"';
-        font-size: 3rem;
-        color: var(--primary-gold);
-        opacity: 0.3;
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        font-family: "Playfair Display", serif;
-      }
-
-      [dir="rtl"] .markdown-content blockquote::before {
-        left: auto;
-        right: 10px;
+        border-right: 4px solid var(--secondary);
       }
 
       /* Next Steps */
       .next-steps {
-        background: var(--gradient-gold);
+        background: var(--gradient-primary);
         color: white;
-        padding: 30px;
-        border-radius: 15px;
+        padding: var(--space-12);
+        border-radius: 20px;
         text-align: center;
         position: relative;
         overflow: hidden;
@@ -685,7 +813,7 @@
           rgba(255, 255, 255, 0.1) 0%,
           transparent 70%
         );
-        animation: rotate 20s linear infinite;
+        animation: rotate 30s linear infinite;
       }
 
       @keyframes rotate {
@@ -698,20 +826,23 @@
       }
 
       .next-steps h3 {
-        margin-bottom: 15px;
+        margin-bottom: var(--space-4);
         position: relative;
         z-index: 2;
+        font-size: 1.5rem;
+        font-weight: 600;
       }
 
       .next-steps p {
-        margin-bottom: 25px;
+        margin-bottom: var(--space-8);
         position: relative;
         z-index: 2;
+        opacity: 0.9;
       }
 
       .next-actions {
         display: flex;
-        gap: 15px;
+        gap: var(--space-4);
         justify-content: center;
         flex-wrap: wrap;
         position: relative;
@@ -725,13 +856,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(5px);
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 1000;
-        padding: 20px;
+        padding: var(--space-4);
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s ease;
@@ -745,7 +876,7 @@
       .modal-content {
         background: white;
         border-radius: 20px;
-        padding: 30px;
+        padding: var(--space-8);
         max-width: 500px;
         width: 100%;
         max-height: 90vh;
@@ -753,6 +884,7 @@
         position: relative;
         transform: translateY(-50px) scale(0.9);
         transition: all 0.3s ease;
+        box-shadow: var(--shadow-xl);
       }
 
       .modal.show .modal-content {
@@ -763,17 +895,17 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 25px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid var(--light-gray);
+        margin-bottom: var(--space-6);
+        padding-bottom: var(--space-4);
+        border-bottom: 2px solid var(--neutral-100);
       }
 
       .modal-close {
         background: none;
         border: none;
-        font-size: 2rem;
+        font-size: 1.5rem;
         cursor: pointer;
-        color: var(--text-light);
+        color: var(--neutral-400);
         transition: all 0.3s ease;
         width: 40px;
         height: 40px;
@@ -785,16 +917,16 @@
       }
 
       .modal-close:hover {
-        color: var(--primary-red);
-        background: rgba(231, 76, 60, 0.1);
+        color: var(--error);
+        background: rgba(239, 68, 68, 0.1);
         transform: scale(1.1);
       }
 
       /* Star Rating */
       .star-rating {
         display: flex;
-        gap: 5px;
-        margin: 10px 0;
+        gap: var(--space-2);
+        margin: var(--space-4) 0;
         justify-content: center;
       }
 
@@ -815,44 +947,51 @@
 
       /* Reviews */
       .reviews-section {
-        margin-top: 40px;
+        margin-top: var(--space-12);
       }
 
       .reviews-list {
         display: grid;
-        gap: 20px;
+        gap: var(--space-6);
       }
 
       .review-item {
-        background: linear-gradient(45deg, #f8f9fa, #ffffff);
-        padding: 20px;
-        border-radius: 15px;
-        border-left: 4px solid var(--primary-gold);
+        background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+        padding: var(--space-6);
+        border-radius: 16px;
+        border-left: 4px solid var(--secondary);
+        box-shadow: var(--shadow);
+        transition: all 0.3s ease;
+      }
+
+      .review-item:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
       }
 
       [dir="rtl"] .review-item {
         border-left: none;
-        border-right: 4px solid var(--primary-gold);
+        border-right: 4px solid var(--secondary);
       }
 
       .review-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 10px;
+        margin-bottom: var(--space-3);
       }
 
       .review-name {
         font-weight: 600;
-        color: var(--text-dark);
+        color: var(--neutral-800);
       }
 
       .review-rating {
-        font-size: 1.1rem;
+        font-size: 1.125rem;
       }
 
       .review-comment {
-        color: var(--text-light);
+        color: var(--neutral-600);
         font-style: italic;
         line-height: 1.6;
       }
@@ -860,15 +999,15 @@
       /* Notification */
       .notification {
         position: fixed;
-        top: 20px;
+        top: var(--space-6);
         left: 50%;
         transform: translateX(-50%) translateY(-100px);
-        background: var(--gradient-gold);
+        background: var(--gradient-primary);
         color: white;
-        padding: 15px 25px;
+        padding: var(--space-4) var(--space-8);
         border-radius: 50px;
         font-weight: 600;
-        box-shadow: 0 10px 30px var(--shadow-heavy);
+        box-shadow: var(--shadow-xl);
         transition: all 0.4s ease;
         z-index: 1001;
       }
@@ -879,23 +1018,28 @@
 
       /* Error State */
       .error-message {
-        background: var(--gradient-red);
+        background: var(--gradient-secondary);
         color: white;
-        padding: 15px 20px;
-        border-radius: 10px;
-        margin-top: 20px;
+        padding: var(--space-4) var(--space-6);
+        border-radius: 12px;
+        margin-top: var(--space-6);
         text-align: center;
         font-weight: 500;
       }
 
       /* Responsive Design */
       @media (max-width: 768px) {
+        body {
+          padding: var(--space-2);
+        }
+
         .container {
-          padding: 10px;
+          padding: var(--space-2);
         }
 
         .hero-stats {
-          gap: 20px;
+          grid-template-columns: 1fr;
+          gap: var(--space-4);
         }
 
         .stat-number {
@@ -903,7 +1047,7 @@
         }
 
         .card {
-          padding: 25px;
+          padding: var(--space-8);
         }
 
         .result-header {
@@ -925,25 +1069,24 @@
         }
 
         .modal-content {
-          margin: 10px;
-          padding: 20px;
+          margin: var(--space-2);
+          padding: var(--space-6);
         }
 
         .language-toggle {
-          top: 10px;
-          right: 10px;
+          top: var(--space-3);
+          right: var(--space-3);
         }
 
         [dir="rtl"] .language-toggle {
           right: auto;
-          left: 10px;
+          left: var(--space-3);
         }
       }
 
       @media (max-width: 480px) {
         .hero-stats {
-          flex-direction: column;
-          gap: 15px;
+          gap: var(--space-3);
         }
 
         .markdown-content h1 {
@@ -951,16 +1094,26 @@
         }
 
         .markdown-content h2 {
-          font-size: 1.3rem;
+          font-size: 1.25rem;
         }
 
-        .floating-elements {
+        .particles {
           display: none;
         }
       }
     </style>
   </head>
   <body>
+    <div class="bg-animation"></div>
+
+    <div class="particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+
     <!-- Language Toggle -->
     <div class="language-toggle">
       <button id="langToggle" class="lang-btn">
@@ -973,21 +1126,11 @@
     <div id="notification" class="notification"></div>
 
     <div class="container">
-      <!-- Floating Elements Background -->
-      <div class="floating-elements">
-        <div class="floating-element">💎</div>
-        <div class="floating-element">🔥</div>
-        <div class="floating-element">⚡</div>
-        <div class="floating-element">🎯</div>
-        <div class="floating-element">💰</div>
-        <div class="floating-element">✨</div>
-      </div>
-
       <header>
         <div class="hero-content">
           <h1 id="mainTitle">Napoleon Hill's AI Success Coach</h1>
           <p class="subtitle" id="subtitle">
-            Transform Your Financial Goal Into Reality - 15 Minutes
+            Transform Your Financial Goal Into Reality in 15 Minutes
           </p>
           <div class="hero-stats">
             <div class="stat-item">
@@ -1011,9 +1154,9 @@
           <h2 id="formTitle">Your Definite Chief Aim Session</h2>
           <div class="card-subtitle">
             <p class="intro" id="formIntro">
-              "All achievement, all earned riches, have their beginning in an
-              idea!"
-              <span class="author">- Napoleon Hill</span>
+              "Abundance is already here, waiting to be noticed. Once you see it
+              clearly, you are allowed to demand it fully."
+              <span class="author">- Your Inner Wisdom</span>
             </p>
           </div>
         </div>
@@ -1041,38 +1184,36 @@
               />
             </div>
             <small id="amountHint"
-              >Be specific - "I want plenty of money" is not enough</small
+              >Be specific about what you're claiming</small
             >
           </div>
 
           <div class="form-group">
-            <label for="deadline" id="labelDeadline">Definite Deadline:</label>
+            <label for="deadline" id="labelDeadline"
+              >Your Chosen Timeline:</label
+            >
             <input type="date" id="deadline" required />
             <small id="deadlineHint"
-              >Hill: "Establish a definite date when you intend to possess the
-              money"</small
+              >Give yourself space to create sustainably</small
             >
           </div>
 
           <div class="form-group">
             <label for="howMethod" id="labelMethod"
-              >How Will You Raise This Money?</label
+              >How Will You Create This?</label
             >
             <textarea
               id="howMethod"
               placeholder="e.g., Freelance web development, selling online courses, starting a consulting business..."
-              rows="3"
+              rows="4"
               required
             ></textarea>
-            <small id="methodHint"
-              >The more specific your method, the better your plan will
-              be</small
-            >
+            <small id="methodHint">What value will you offer the world?</small>
           </div>
 
           <button type="submit" class="cta-button">
-            <span class="btn-icon">🔥</span>
-            <span id="submitText">Start My Transformation</span>
+            <span class="btn-icon">✨</span>
+            <span id="submitText">Claim My Success</span>
             <div class="btn-shimmer"></div>
           </button>
         </form>
@@ -1085,7 +1226,9 @@
             <div class="loader-ring"></div>
             <div class="loader-ring"></div>
           </div>
-          <p id="loadingText">Napoleon Hill's AI is analyzing your goal...</p>
+          <p id="loadingText">
+            Crafting your personalized success blueprint...
+          </p>
           <div class="loading-progress">
             <div class="progress-bar"></div>
           </div>
@@ -1095,11 +1238,11 @@
       <div id="results" class="hidden">
         <div class="card result-card">
           <div class="result-header">
-            <h2 id="resultTitle">Your Personalized Success Plan</h2>
+            <h2 id="resultTitle">Your Success Blueprint</h2>
             <div class="result-actions">
               <button id="emailBtn" class="action-btn email-btn">
                 <span>📧</span>
-                <span id="emailText">Email This Plan</span>
+                <span id="emailText">Email This</span>
               </button>
               <button id="shareBtn" class="action-btn share-btn">
                 <span>🔗</span>
@@ -1111,14 +1254,14 @@
           <div id="coachResponse" class="markdown-content"></div>
 
           <div class="next-steps">
-            <h3 id="nextStepsTitle">🎯 Ready for the Full Journey?</h3>
+            <h3 id="nextStepsTitle">🎯 Ready to Expand Your Success?</h3>
             <p id="nextStepsText">
-              This is just the beginning. Imagine having this coach guide you
-              every step of the way to your goal.
+              This is your foundation. Imagine having this level of clarity for
+              every goal you set.
             </p>
             <div class="next-actions">
               <button class="cta-button secondary" id="transformBtn">
-                Transform Another Goal
+                Create Another Blueprint
               </button>
               <button class="cta-button tertiary" id="reviewBtn">
                 Share Your Experience
@@ -1132,7 +1275,7 @@
       <div id="emailModal" class="modal">
         <div class="modal-content">
           <div class="modal-header">
-            <h3 id="emailModalTitle">📧 Email Your Success Plan</h3>
+            <h3 id="emailModalTitle">📧 Email Your Blueprint</h3>
             <button class="modal-close" data-modal="emailModal">&times;</button>
           </div>
           <form id="emailForm">
@@ -1141,7 +1284,7 @@
               <input type="email" id="userEmail" required />
             </div>
             <button type="submit" class="cta-button" id="sendEmailBtn">
-              Send My Plan
+              Send My Blueprint
             </button>
           </form>
         </div>
@@ -1203,42 +1346,40 @@
       const translations = {
         en: {
           mainTitle: "Napoleon Hill's AI Success Coach",
-          subtitle: "Transform Your Financial Goal Into Reality - 15 Minutes",
+          subtitle: "Transform Your Financial Goal Into Reality in 15 Minutes",
           statMinutes: "Minutes",
           statPossibility: "Possibility",
           statGoal: "Goal",
           formTitle: "Your Definite Chief Aim Session",
           formIntro:
-            '"All achievement, all earned riches, have their beginning in an idea!"',
+            '"True power is quiet. When you know your worth and see your path clearly, you simply claim what you want with calm confidence."',
           labelName: "Your Name:",
           labelAmount: "Exact Amount (NIS):",
-          labelDeadline: "Definite Deadline:",
-          labelMethod: "How Will You Raise This Money?",
-          amountHint: 'Be specific - "I want plenty of money" is not enough',
-          deadlineHint:
-            'Hill: "Establish a definite date when you intend to possess the money"',
-          methodHint:
-            "The more specific your method, the better your plan will be",
-          submitText: "Start My Transformation",
-          loadingText: "Napoleon Hill's AI is analyzing your goal...",
-          resultTitle: "Your Personalized Success Plan",
-          emailText: "Email This Plan",
+          labelDeadline: "Your Chosen Timeline:",
+          labelMethod: "How Will You Create This?",
+          amountHint: "Be specific about what you're claiming",
+          deadlineHint: "Give yourself space to create sustainably",
+          methodHint: "What value will you offer the world?",
+          submitText: "Claim My Success",
+          loadingText: "Crafting your personalized success blueprint...",
+          resultTitle: "Your Success Blueprint",
+          emailText: "Email This",
           shareText: "Share",
-          nextStepsTitle: "🎯 Ready for the Full Journey?",
+          nextStepsTitle: "🎯 Ready to Expand Your Success?",
           nextStepsText:
-            "This is just the beginning. Imagine having this coach guide you every step of the way to your goal.",
-          transformBtn: "Transform Another Goal",
+            "This is your foundation. Imagine having this level of clarity for every goal you set.",
+          transformBtn: "Create Another Blueprint",
           reviewBtn: "Share Your Experience",
-          emailModalTitle: "📧 Email Your Success Plan",
+          emailModalTitle: "📧 Email Your Blueprint",
           emailLabel: "Your Email:",
-          sendEmailBtn: "Send My Plan",
+          sendEmailBtn: "Send My Blueprint",
           reviewModalTitle: "⭐ Share Your Experience",
           ratingLabel: "How was your experience?",
           commentLabel: "Your thoughts:",
           submitReviewBtn: "Submit Review",
           reviewsTitle: "✨ Success Stories",
           langText: "עברית",
-          planSent: "Plan sent successfully!",
+          planSent: "Blueprint sent successfully!",
           reviewSubmitted: "Thank you for your review!",
           networkError:
             "Network error. Please check your connection and try again.",
@@ -1248,31 +1389,31 @@
         },
         he: {
           mainTitle: "מאמן הצלחה בינה מלאכותית של נפוליאון היל",
-          subtitle: "הפוך את המטרה הכלכלית שלך למציאות - 15 דקות",
+          subtitle: "הפוך את המטרה הכלכלית שלך למציאות ב-15 דקות",
           statMinutes: "דקות",
           statPossibility: "אפשרות",
           statGoal: "מטרה",
           formTitle: "סשן המטרה הראשית המוגדרת שלך",
-          formIntro: '"כל הישג, כל עושר שנרכש, מתחיל ברעיון!"',
+          formIntro:
+            '"כוח אמיתי הוא שקט. כשאתה יודע את הערך שלך ורואה את הדרך שלך בבהירות, אתה פשוט תובע מה שאתה רוצה בביטחון שקט."',
           labelName: "השם שלך:",
           labelAmount: "סכום מדויק (שקלים):",
-          labelDeadline: "מועד אחרון מוגדר:",
-          labelMethod: "איך תגייס את הכסף הזה?",
-          amountHint: 'היה ספציפי - "אני רוצה הרבה כסף" זה לא מספיק',
-          deadlineHint: 'היל: "קבע תאריך מדויק מתי אתה מתכוון להחזיק בכסף"',
-          methodHint:
-            "ככל שהשיטה שלך ספציפית יותר, כך התוכנית שלך תהיה טובה יותר",
-          submitText: "התחל את הטרנספורמציה שלי",
-          loadingText: "הבינה המלאכותית של נפוליאון היל מנתחת את המטרה שלך...",
-          resultTitle: "תוכנית ההצלחה האישית שלך",
-          emailText: "שלח תוכנית במייל",
+          labelDeadline: "הזמן שבחרת:",
+          labelMethod: "איך תיצור את זה?",
+          amountHint: "היה ספציפי לגבי מה שאתה תובע",
+          deadlineHint: "תן לעצמך מקום ליצור בצורה בת קיימא",
+          methodHint: "איזה ערך תציע לעולם?",
+          submitText: "אני תובע את הצלחתי",
+          loadingText: "יוצר את תוכנית הצלחתך האישית...",
+          resultTitle: "תוכנית ההצלחה שלך",
+          emailText: "שלח במייל",
           shareText: "שתף",
-          nextStepsTitle: "🎯 מוכן למסע המלא?",
+          nextStepsTitle: "🎯 מוכן להרחיב את הצלחתך?",
           nextStepsText:
-            "זו רק ההתחלה. תאר לעצמך שהמאמן הזה מנחה אותך בכל שלב בדרך למטרה שלך.",
-          transformBtn: "הפוך מטרה נוספת",
+            "זה הבסיס שלך. תאר לעצמך שיש לך רמת בהירות כזו לכל מטרה שאתה מציב.",
+          transformBtn: "צור תוכנית נוספת",
           reviewBtn: "שתף את החוויה שלך",
-          emailModalTitle: "📧 שלח את תוכנית ההצלחה שלך במייל",
+          emailModalTitle: "📧 שלח את התוכנית שלך במייל",
           emailLabel: "המייל שלך:",
           sendEmailBtn: "שלח את התוכנית שלי",
           reviewModalTitle: "⭐ שתף את החוויה שלך",
@@ -1444,9 +1585,11 @@
         });
 
         // Special cases
-        document.getElementById(
-          "formIntro"
-        ).innerHTML = `${t.formIntro}<span class="author">- Napoleon Hill</span>`;
+        document.getElementById("formIntro").innerHTML = `${
+          t.formIntro
+        }<span class="author">${
+          currentLanguage === "he" ? "- התבונה שלך" : "- Your Inner Wisdom"
+        }</span>`;
         document.querySelector(".lang-text").textContent = t.langText;
         document.querySelector(".lang-flag").textContent =
           currentLanguage === "en" ? "🇮🇱" : "🇺🇸";
@@ -1469,9 +1612,6 @@
       async function handleFormSubmit(e) {
         e.preventDefault();
 
-        const submitBtn = e.target.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-
         const formData = {
           userName: document.getElementById("userName").value,
           goalAmount: document.getElementById("goalAmount").value,
@@ -1490,7 +1630,7 @@
         enhanceLoadingExperience();
 
         try {
-          // REAL API CALL TO CLAUDE
+          // API call to coach
           const response = await fetch("/api/coach", {
             method: "POST",
             headers: {
@@ -1526,10 +1666,8 @@
       }
 
       function showError(message) {
-        // Show error in the form area
         elements.demoForm.classList.remove("hidden");
 
-        // Create or update error message
         let errorEl = document.getElementById("error-message");
         if (!errorEl) {
           errorEl = document.createElement("div");
@@ -1540,7 +1678,7 @@
 
         errorEl.innerHTML = `
                 <div>${message}</div>
-                <button onclick="document.getElementById('error-message').remove()" style="margin-top: 10px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 5px; cursor: pointer;">
+                <button onclick="document.getElementById('error-message').remove()" style="margin-top: 10px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 8px; cursor: pointer;">
                     ${translations[currentLanguage].retryBtn}
                 </button>
             `;
@@ -1551,15 +1689,15 @@
           currentLanguage === "he"
             ? [
                 "מנתח את המטרה שלך...",
-                "מפעיל את עקרונות נפוליאון היל...",
+                "מיישם עקרונות נפוליאון היל...",
                 "בונה תוכנית מותאמת אישית...",
-                "מעורר את התשוקה הבוערת שלך...",
+                "מעורר את הכוח הפנימי שלך...",
               ]
             : [
                 "Analyzing your goal...",
                 "Applying Napoleon Hill's principles...",
-                "Building your personalized plan...",
-                "Igniting your burning desire...",
+                "Building your personalized blueprint...",
+                "Awakening your inner power...",
               ];
 
         let textIndex = 0;
@@ -1572,7 +1710,7 @@
           }
           textIndex = (textIndex + 1) % loadingTexts.length;
           loadingTextElement.textContent = loadingTexts[textIndex];
-        }, 1500);
+        }, 2000);
       }
 
       function startOver() {
@@ -1581,7 +1719,6 @@
         elements.results.classList.add("hidden");
         elements.demoForm.classList.remove("hidden");
 
-        // Remove any error messages
         const errorEl = document.getElementById("error-message");
         if (errorEl) errorEl.remove();
 
@@ -1597,7 +1734,6 @@
         const modal = document.getElementById(modalId);
         modal.classList.remove("show");
 
-        // Reset forms
         if (modalId === "reviewModal") {
           currentRating = 0;
           updateStarDisplay();
@@ -1615,7 +1751,9 @@
 
         if (!currentGoalData) {
           showNotification(
-            currentLanguage === "he" ? "אין תוכנית לשלוח!" : "No plan to send!",
+            currentLanguage === "he"
+              ? "אין תוכנית לשלוח!"
+              : "No blueprint to send!",
             "error"
           );
           return;
@@ -1628,7 +1766,6 @@
           currentLanguage === "he" ? "שולח..." : "Sending...";
 
         try {
-          // REAL API CALL FOR EMAIL
           const response = await fetch("/api/send-email", {
             method: "POST",
             headers: {
@@ -1713,7 +1850,6 @@
           currentLanguage === "he" ? "שולח..." : "Submitting...";
 
         try {
-          // REAL API CALL FOR REVIEW
           const response = await fetch("/api/review", {
             method: "POST",
             headers: {
@@ -1735,7 +1871,7 @@
               "success"
             );
             closeModal("reviewModal");
-            loadReviews(); // Refresh reviews
+            loadReviews();
           } else {
             throw new Error(data.error || "Review submission failed");
           }
@@ -1750,12 +1886,11 @@
 
       async function loadReviews() {
         try {
-          // REAL API CALL FOR REVIEWS
           const response = await fetch("/api/reviews");
           const reviews = await response.json();
 
           if (reviews.length === 0) {
-            elements.reviewsList.innerHTML = `<p style="text-align: center; color: #7f8c8d; font-style: italic;">
+            elements.reviewsList.innerHTML = `<p style="text-align: center; color: #737373; font-style: italic;">
                         ${
                           currentLanguage === "he"
                             ? "היה הראשון לשתף את החוויה שלך!"
@@ -1790,8 +1925,7 @@
             .join("");
         } catch (error) {
           console.error("Error loading reviews:", error);
-          // Fallback to show empty state
-          elements.reviewsList.innerHTML = `<p style="text-align: center; color: #7f8c8d; font-style: italic;">
+          elements.reviewsList.innerHTML = `<p style="text-align: center; color: #737373; font-style: italic;">
                     ${
                       currentLanguage === "he"
                         ? "היה הראשון לשתף את החוויה שלך!"
@@ -1807,15 +1941,14 @@
             title:
               currentLanguage === "he"
                 ? "תוכנית ההצלחה שלי"
-                : "My Success Plan",
+                : "My Success Blueprint",
             text:
               currentLanguage === "he"
                 ? `זה עתה יצרתי תוכנית הצלחה אישית למטרה שלי של ${currentGoalData.goalAmount} שקל!`
-                : `I just created a personalized success plan for my goal of ${currentGoalData.goalAmount} NIS!`,
+                : `I just created a personalized success blueprint for my goal of ${currentGoalData.goalAmount} NIS!`,
             url: window.location.href,
           });
         } else {
-          // Fallback - copy to clipboard
           navigator.clipboard.writeText(window.location.href).then(() => {
             showNotification(
               currentLanguage === "he" ? "הקישור הועתק!" : "Link copied!",
@@ -1828,7 +1961,9 @@
       function showNotification(message, type = "success") {
         elements.notification.textContent = message;
         elements.notification.style.background =
-          type === "success" ? "var(--gradient-gold)" : "var(--gradient-red)";
+          type === "success"
+            ? "var(--gradient-primary)"
+            : "var(--gradient-secondary)";
         elements.notification.classList.add("show");
 
         setTimeout(() => {
